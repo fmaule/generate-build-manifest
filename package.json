@@ -1,0 +1,20 @@
+{
+  "name": "generate-manifest",
+  "version": "0.1.0",
+  "description": "GitHub Action to generate manifest files for NodeJS projects",
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "prepare": "ncc build src/index.js -o dist --source-map --license licenses.txt",
+    "build": "npm run lint && npm run prepare"
+  },
+  "author": "Fernando A. Maule <fer@maule.pro>",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0"
+  }
+}

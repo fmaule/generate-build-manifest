@@ -1,0 +1,26 @@
+name: 'Generate manifest.json'
+description: 'Generates a manifest.json based on refs / package.json'
+inputs:
+  scm-info:
+    description: 'Get information from SCM/GitHub'
+    required: false
+    default: 'on'
+  package-info:
+    description: 'Get information from package.json'
+    required: false
+    default: 'on'
+  action-info:
+    description: 'Write GitHub action info in the manifest'
+    required: false
+    default: 'on'
+  append-dockerfile:
+    description: 'Automatically append COPY command on Dockerfile'
+    required: false
+    default: 'on'
+  manifest-name:
+    description: 'Filename for manifest'
+    required: false
+    default: 'manifest.json'
+runs:
+  using: 'node12'
+  main: 'index.js'
