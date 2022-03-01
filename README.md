@@ -51,18 +51,13 @@ Works only if it's a project with a package.json (package name, package version)
 
 Write action related info. (workflow name, runner info)
 
-## `action-info`
-`on/off`: default on
-
-Write action related info. (workflow name, runner info)
-
 ## `append-dockerfile`
 `on/off`: default off
 
 **WARNING** this is experimental.
 Appends a COPY command to Dockerfile that injects the manifest file in your WORKDIR before building the image.
 
-## `append-dockerfile`
+## `manifest-name`
 `filename`: default `manifest.json`
 
 Sets the name of the manifest file.
