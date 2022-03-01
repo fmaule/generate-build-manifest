@@ -70,7 +70,7 @@ Sets the name of the manifest file.
 # 💡 Usage examples
 
 ```
-uses: fmaule/generate-manifest
+uses: fmaule/generate-manifest@v1
 with:
   append-dockerfile: 'on' # enable injection into docker image
 ```
@@ -85,7 +85,7 @@ build_with_manifest:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Hello world action step
-      uses: fmaule/generate-manifest
+      uses: fmaule/generate-manifest@v1
       with:
         append-dockerfile: 'on' # enable injection into docker image
 
