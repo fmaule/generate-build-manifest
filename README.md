@@ -1,97 +1,67 @@
-# ⚙️ Generate manifest.json for NodeJS projects
+# Generate `manifest.json` for NodeJS Projects
 
-Use this action to generate (and optionally inject) a manifest file in your Docker image.
+This GitHub Action generates a `manifest.json` file for your NodeJS projects, which can be especially helpful for debugging and tracking the build information. The manifest includes information such as the source control metadata, package details, and GitHub Actions runner info. This action is best used after checking out your code in a GitHub workflow.
 
-Inspired by [make-manifest](https://github.com/guidesmiths/make-manifest) to replace it in GitHub workflows.
+Inspired by [make-manifest](https://github.com/guidesmiths/make-manifest).
 
-You need to use this action AFTER checking out your code.
+## 🚀 Installation
+To use this GitHub Action, add the following step to your GitHub workflow YAML file:
 
-# 🤨 Why?
-
-It's good practice to ship some basic information about your application build in case you need to rebuild or debug it from source. It can also be useful to guarantee at least one new layer if you're deploying your application within a docker image. Copying a freshly generated manifest in the last step of your Dockerfile will achieve this.
-
-### Example output manifest.json
-
-```
-{
-  "timestamp": "2022-03-01T15:06:02.897Z",
-  "scm": {
-    "remote": "git@github.com:fmaule/test-playground.git",
-    "branch": "main",
-    "commit": "6eca3ecdf80a78e3bfbbfbd37da02a85cea63c96"
-  },
-  "name": "test-package",
-  "version": "0.0.3",
-  "ghAction": {
-    "workflow": "docker build",
-    "runner": {
-      "arch": "X64",
-      "name": "Hosted Agent",
-      "os": "Linux"
-    }
-  }
-}
+```yaml
+- name: Generate manifest
+  uses: fmaule/generate-manifest@v1
 ```
 
-# 📥 Inputs
+## 📋 Prerequisites
+- NodeJS project with a `package.json` file
+- Git repository
 
-## `scm-info`
-`on/off`: default on
+## 📥 Inputs
 
-Write information related to the ref in the manifest (remote, branch name, commit sha).
+| Input              | Description                               | Default |
+|--------------------|-------------------------------------------|---------|
+| `scm-info`         | Include SCM (Source Control) information  | `on`    |
+| `package-info`     | Include package information               | `on`    |
+| `action-info`      | Include GitHub Actions runner information | `on`    |
+| `append-dockerfile`| Append a COPY command to Dockerfile       | `off`   |
+| `manifest-name`    | Sets the name of the manifest file        | `manifest.json`|
 
-## `package-info`
-`on/off`: default on 
+## 💡 Usage Examples
 
-Write package information. 
-Works only if it's a project with a package.json (package name, package version)
+Simple example:
 
-## `action-info`
-`on/off`: default on
-
-Write action related info. (workflow name, runner info)
-
-## `append-dockerfile`
-`on/off`: default off
-
-**WARNING** this is experimental.
-Appends a COPY command to Dockerfile that injects the manifest file in your WORKDIR before building the image.
-
-## `manifest-name`
-`filename`: default `manifest.json`
-
-Sets the name of the manifest file.
-
-# 💡 Usage examples
-
-```
+```yaml
 uses: fmaule/generate-manifest@v1
 with:
   append-dockerfile: 'on' # enable injection into docker image
 ```
 
-### Full usage example
-```
+### Full Usage Example
+
+```yaml
 jobs:
-build_with_manifest:
-  runs-on: ubuntu-latest
-  name: Generate manifest and build docker image
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Hello world action step
-      uses: fmaule/generate-manifest@v1
-      with:
-        append-dockerfile: 'on' # enable injection into docker image
-
-[...docker build steps]
+  build_with_manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate manifest
+        uses: fmaule/generate-manifest@v1
+        with:
+          append-dockerfile: 'on'
+          
+# ... your docker build steps go here
 ```
-More about docker build actions: [here](https://github.com/docker/build-push-action)
 
-# 🐛 Debugging
-You can set the secret `ACTIONS_STEP_DEBUG` to enable debug info.
-https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#step-debug-logs
+More about Docker build actions can be found [here](https://github.com/docker/build-push-action).
 
+## 🐛 Debugging
+Enable debug info by setting the secret `ACTIONS_STEP_DEBUG`. [Read more](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#step-debug-logs).
 
-# 👏 Contributing
-Any contribution / suggestion is more than welcome.
+## 👏 Contributing
+Any contribution or suggestion is more than welcome. Please open an issue or submit a pull request.
+
+## 📚 FAQs
+
+- **Q: Why is the `manifest.json` file not generated?**
+  - A: Make sure you've checked out your code before running this action.
