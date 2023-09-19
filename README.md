@@ -9,7 +9,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 ```yaml
 - name: Generate manifest
-  uses: fmaule/generate-manifest@v1
+  uses: fmaule/generate-manifest@§.0
 ```
 
 ## 📋 Prerequisites
@@ -31,7 +31,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 Simple example:
 
 ```yaml
-uses: fmaule/generate-manifest@v1
+uses: fmaule/generate-manifest@v1.0
 with:
   append-dockerfile: 'on' # enable injection into docker image
 ```
@@ -46,7 +46,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate manifest
-        uses: fmaule/generate-manifest@v1
+        uses: fmaule/generate-manifest@v1.0
         with:
           append-dockerfile: 'on'
           
