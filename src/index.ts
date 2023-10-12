@@ -78,10 +78,10 @@ try {
   if (!process.env.GITHUB_WORKSPACE)
     throw new Error("Please checkout your repository first (see README)");
 
-  const writeScm = getBool(core.getInput("scm-info"));
-  const writePackageInfo = getBool(core.getInput("package-info"));
-  const writeActionInfo = getBool(core.getInput("action-info"));
-  const appendDockerFile = getBool(core.getInput("append-dockerfile"));
+  const writeScm = core.getBooleanInput("scm-info");
+  const writePackageInfo = core.getBooleanInput("package-info");
+  const writeActionInfo = core.getBooleanInput("action-info");
+  const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestName = core.getInput("manifest-name");
 
   core.debug(
