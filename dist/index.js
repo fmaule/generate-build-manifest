@@ -1,4 +1,4 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 7351:
@@ -29734,6 +29734,121 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 6144:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs_1 = __importDefault(__nccwpck_require__(7147));
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
+const getBool = (input) => (input === "on" ? true : false);
+const getPackageInfo = () => {
+    const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
+    const packageJson = require(packageJsonLocation);
+    const { name, version } = packageJson;
+    return { name, version };
+};
+const getActionInfo = () => {
+    const workflow = process.env.GITHUB_WORKFLOW;
+    const runnerArch = process.env.RUNNER_ARCH;
+    const runnerName = process.env.RUNNER_NAME;
+    const runnerOs = process.env.RUNNER_OS;
+    const ghAction = {
+        workflow,
+        runner: {
+            arch: runnerArch,
+            name: runnerName,
+            os: runnerOs,
+        },
+    };
+    return { ghAction };
+};
+const getScm = () => {
+    const { context } = github;
+    const events = ["push", "pull_request", "workflow_dispatch"];
+    if (!events.includes(context.eventName)) {
+        return { scm: null };
+    }
+    const { repository } = github.context.payload;
+    const { sha, ref } = context;
+    const { ssh_url, clone_url } = repository;
+    const branch = process.env.GITHUB_REF_NAME;
+    const scm = {
+        eventName: context.eventName,
+        ssh_url,
+        clone_url,
+        branch,
+        sha,
+        ref,
+    };
+    return { scm };
+};
+const writeDockerFile = (manifestName) => {
+    const dockerCommand = `\nCOPY ${manifestName} ./\n`;
+    const dockerFile = `${process.env.GITHUB_WORKSPACE}/Dockerfile`;
+    core.debug(`Appending command to docker file (${dockerFile}): ${dockerCommand}`);
+    fs_1.default.appendFileSync(dockerFile, dockerCommand);
+};
+try {
+    if (!process.env.GITHUB_WORKSPACE)
+        throw new Error("Please checkout your repository first (see README)");
+    const writeScm = core.getBooleanInput("scm-info");
+    const writePackageInfo = core.getBooleanInput("package-info");
+    const writeActionInfo = core.getBooleanInput("action-info");
+    const appendDockerFile = core.getBooleanInput("append-dockerfile");
+    const manifestFile = core.getInput("manifest-file");
+    core.debug(`Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`);
+    const timestamp = new Date().toISOString();
+    const manifest = {
+        timestamp,
+        ...(writeScm && getScm()),
+        ...(writePackageInfo && getPackageInfo()),
+        ...(writeActionInfo && getActionInfo()),
+    };
+    fs_1.default.writeFileSync(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`, "utf-8");
+    if (appendDockerFile) {
+        writeDockerFile(manifestFile);
+    }
+    appendDockerFile
+        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile sadfaskfkdsfadsfasdfsda`)
+        : core.info(`📝 Manifest: ${manifestFile} asdfsdafsdfsafdafdfdas`);
+}
+catch (e) {
+    core.error(e);
+    core.setFailed(e.message);
+}
+
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module) => {
 
@@ -29996,93 +30111,12 @@ module.exports = require("zlib");
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
-const fs = __nccwpck_require__(7147)
-
-const getBool = (input) => input === 'on' ? true : false
-
-const getPackageInfo = () => {
-  const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`
-  const packageJson = require(packageJsonLocation)
-  const { name, version } = packageJson
-  return { name, version }
-}
-
-const getActionInfo = () => {
-  const workflow = process.env.GITHUB_WORKFLOW
-  const runnerArch = process.env.RUNNER_ARCH
-  const runnerName = process.env.RUNNER_NAME
-  const runnerOs = process.env.RUNNER_OS
-
-  const ghAction = {
-    workflow,
-    runner: {
-      arch: runnerArch,
-      name: runnerName,
-      os: runnerOs,
-    }
-  }
-  return { ghAction }
-}
-
-const getScm = () => {
-  const { repository } = (github.context || {}).payload || {}
-  const { ssh_url } = repository || {}
-
-  const remote = ssh_url
-  const branch = process.env.GITHUB_REF_NAME
-  const commit = process.env.GITHUB_SHA
-
-  const scm = {
-    remote,
-    branch,
-    commit,
-  }
-
-  return { scm }
-}
-
-const writeDockerFile = (manifestName) => {
-  const dockerCommand = `\nCOPY ${manifestName} ./\n`
-  const dockerFile = `${process.env.GITHUB_WORKSPACE}/Dockerfile`
-  core.debug(`Appending command to docker file (${dockerFile}): ${dockerCommand}`);
-  fs.appendFileSync(dockerFile, dockerCommand);
-}
-
-try {
-  const writeScm = getBool(core.getInput('scm-info'))
-  const writePackageInfo = getBool(core.getInput('package-info'))
-  const writeActionInfo = getBool(core.getInput('action-info'))
-  const appendDockerFile = getBool(core.getInput('append-dockerfile')) 
-  const manifestName = core.getInput('manifest-name')
-
-  core.debug(`Manifest ${manifestName} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`);
-  
-  const timestamp = new Date().toISOString();
-
-  const manifest = { 
-    timestamp,
-    ...(writeScm && getScm()),
-    ...(writePackageInfo && getPackageInfo()),
-    ...(writeActionInfo && getActionInfo()),
-  };
-
-  fs.writeFileSync(manifestName, `${JSON.stringify(manifest, null, 2)}\n`, 'utf-8')
-
-  if (appendDockerFile) { 
-    writeDockerFile(manifestName)
-  }
-} catch (error) {
-  core.error(error)
-  core.setFailed(error.message)
-}
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6144);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map
