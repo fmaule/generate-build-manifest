@@ -1,8 +1,8 @@
-const core = require("@actions/core");
-const github = require("@actions/github");
-const fs = require("fs");
+import fs from "fs";
+import * as core from "@actions/core";
+import * as github from "@actions/github";
 
-const getBool = (input) => (input === "on" ? true : false);
+const getBool = (input: string): boolean => (input === "on" ? true : false);
 
 const getPackageInfo = () => {
   const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
@@ -45,7 +45,7 @@ const getScm = () => {
   return { scm };
 };
 
-const writeDockerFile = (manifestName) => {
+const writeDockerFile = (manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
   const dockerFile = `${process.env.GITHUB_WORKSPACE}/Dockerfile`;
   core.debug(
@@ -83,7 +83,7 @@ try {
   if (appendDockerFile) {
     writeDockerFile(manifestName);
   }
-} catch (error) {
-  core.error(error);
-  core.setFailed(error.message);
+} catch (err) {
+  core.error(err as Error);
+  core.setFailed((err as Error).message);
 }
