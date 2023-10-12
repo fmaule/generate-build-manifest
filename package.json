@@ -1,6 +1,6 @@
 {
-  "name": "generate-manifest",
-  "version": "0.1.0",
+  "name": "generate-build-manifest",
+  "version": "2.0.0",
   "description": "GitHub Action to generate manifest files for NodeJS projects",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "biome:fix": "biome check . --apply",
     "biome:fix-unsafe": "biome check . --apply-unsafe",
     "prepare": "husky install",
+    "ghadocs": "github-action-readme-generator --readme README.md && git add README.md",
     "pack": "ncc build src/index.ts -o dist",
     "pack:sourcemap": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
   },
@@ -22,6 +23,7 @@
     "@octokit/webhooks-definitions": "^3.67.3",
     "@types/node": "^20.8.4",
     "@vercel/ncc": "^0.38.0",
+    "github-action-readme-generator": "^1.2.7",
     "husky": "^8.0.3",
     "typescript": "^5.2.2"
   }
