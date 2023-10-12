@@ -32,9 +32,7 @@ jobs:
         run: npm run pack
       - name: Check for changes
         id: packedJsStatus  
-        run: |
-          rm .gitignore
-          echo changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain) >> $GITHUB_OUTPUT
+        run: echo changes=$(git status ${{ env.PACKED_JS_PATH }} --porcelain) >> $GITHUB_OUTPUT
       - name: Commit packed JS
         id: commitPackedJs  
         if: steps.packedJsStatus.outputs.changes  
