@@ -9,7 +9,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 ```yaml
 - name: Generate manifest
-  uses: fmaule/generate-manifest@§.0
+  uses: fmaule/generate-manifest@1.0
 ```
 
 ## 📋 Prerequisites
@@ -20,11 +20,11 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 | Input              | Description                               | Default |
 |--------------------|-------------------------------------------|---------|
-| `scm-info`         | Include SCM (Source Control) information  | `on`    |
-| `package-info`     | Include package information               | `on`    |
-| `action-info`      | Include GitHub Actions runner information | `on`    |
-| `append-dockerfile`| Append a COPY command to Dockerfile       | `off`   |
-| `manifest-name`    | Sets the name of the manifest file        | `manifest.json`|
+| `scm-info`         | Include SCM (Source Control) information  | `true`    |
+| `package-info`     | Include package information               | `true`    |
+| `action-info`      | Include GitHub Actions runner information | `true`    |
+| `append-dockerfile`| Append a COPY command to Dockerfile       | `true`   |
+| `manifest-file`    | Sets the name of the manifest file        | `build-manifest.json`|
 
 ## 💡 Usage Examples
 
@@ -33,7 +33,7 @@ Simple example:
 ```yaml
 uses: fmaule/generate-manifest@v1.0
 with:
-  append-dockerfile: 'on' # enable injection into docker image
+  append-dockerfile: true # enable injection into docker image
 ```
 
 ### Full Usage Example
@@ -44,11 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Generate manifest
         uses: fmaule/generate-manifest@v1.0
         with:
-          append-dockerfile: 'on'
+          action-info: false # disable writing action information to manifest
           
 # ... your docker build steps go here
 ```
@@ -63,5 +63,3 @@ Any contribution or suggestion is more than welcome. Please open an issue or sub
 
 ## 📚 FAQs
 
-- **Q: Why is the `manifest.json` file not generated?**
-  - A: Make sure you've checked out your code before running this action.
