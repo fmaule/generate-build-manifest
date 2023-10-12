@@ -1,0 +1,19 @@
+name: "Release"
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: teunmooij/github-versioned-release@v1
+        with:
+          template: 'javascript-action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
