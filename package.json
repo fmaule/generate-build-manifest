@@ -17,6 +17,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.2.2",
+		"@octokit/webhooks-definitions": "^3.67.3",
 		"@types/node": "^20.8.4",
 		"@vercel/ncc": "^0.38.0",
 		"husky": "^8.0.3",

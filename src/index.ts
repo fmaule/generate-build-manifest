@@ -1,17 +1,24 @@
+import { ActionInfo, Manifest, Package, SCM } from "./types";
+
 import fs from "fs";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import {
+  PullRequestEvent,
+  PushEvent,
+  WorkflowDispatchEvent,
+} from "@octokit/webhooks-definitions/schema";
 
 const getBool = (input: string): boolean => (input === "on" ? true : false);
 
-const getPackageInfo = () => {
+const getPackageInfo = (): Package => {
   const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
   const packageJson = require(packageJsonLocation);
   const { name, version } = packageJson;
   return { name, version };
 };
 
-const getActionInfo = () => {
+const getActionInfo = (): { ghAction: ActionInfo } => {
   const workflow = process.env.GITHUB_WORKFLOW;
   const runnerArch = process.env.RUNNER_ARCH;
   const runnerName = process.env.RUNNER_NAME;
@@ -25,21 +32,34 @@ const getActionInfo = () => {
       os: runnerOs,
     },
   };
+
   return { ghAction };
 };
 
-const getScm = () => {
-  const { repository } = github.context?.payload || {};
-  const { ssh_url } = repository || {};
+const getScm = (): { scm: SCM | null } => {
+  const { context } = github;
+  const events = ["push", "pull_request", "workflow_dispatch"];
 
-  const remote = ssh_url;
+  if (!events.includes(context.eventName)) {
+    return { scm: null };
+  }
+
+  const { repository } = github.context.payload as
+    | PushEvent
+    | WorkflowDispatchEvent
+    | PullRequestEvent;
+  const { sha, ref } = context;
+  const { ssh_url, clone_url } = repository;
+
   const branch = process.env.GITHUB_REF_NAME;
-  const commit = process.env.GITHUB_SHA;
 
   const scm = {
-    remote,
+    eventName: context.eventName,
+    ssh_url,
+    clone_url,
     branch,
-    commit,
+    sha,
+    ref,
   };
 
   return { scm };
@@ -55,6 +75,9 @@ const writeDockerFile = (manifestName: string) => {
 };
 
 try {
+  if (!process.env.GITHUB_WORKSPACE)
+    throw new Error("Please checkout your repository first (see README)");
+
   const writeScm = getBool(core.getInput("scm-info"));
   const writePackageInfo = getBool(core.getInput("package-info"));
   const writeActionInfo = getBool(core.getInput("action-info"));
@@ -67,7 +90,7 @@ try {
 
   const timestamp = new Date().toISOString();
 
-  const manifest = {
+  const manifest: Manifest = {
     timestamp,
     ...(writeScm && getScm()),
     ...(writePackageInfo && getPackageInfo()),
@@ -83,7 +106,13 @@ try {
   if (appendDockerFile) {
     writeDockerFile(manifestName);
   }
-} catch (err) {
-  core.error(err as Error);
-  core.setFailed((err as Error).message);
+
+  appendDockerFile
+    ? core.info(
+        `📝 Manifest: ${manifestName} + COPY to Dockerfile sadfaskfkdsfadsfasdfsda`,
+      )
+    : core.info(`📝 Manifest: ${manifestName} asdfsdafsdfsafdafdfdas`);
+} catch (e) {
+  core.error(e as Error);
+  core.setFailed((e as Error).message);
 }
