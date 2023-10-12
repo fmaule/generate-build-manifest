@@ -1,26 +1,28 @@
 {
-	"name": "generate-manifest",
-	"version": "0.1.0",
-	"description": "GitHub Action to generate manifest files for NodeJS projects",
-	"main": "dist/index.js",
-	"scripts": {
-		"biome": "biome check .",
-		"biome:fix": "biome check . --apply",
-		"biome:fix-unsafe": "biome check . --apply-unsafe",
-		"prepare": "husky install"
-	},
-	"author": "Fernando A. Maule <fer@maule.pro>",
-	"license": "ISC",
-	"dependencies": {
-		"@actions/core": "^1.10.1",
-		"@actions/github": "^6.0.0"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.2.2",
-		"@octokit/webhooks-definitions": "^3.67.3",
-		"@types/node": "^20.8.4",
-		"@vercel/ncc": "^0.38.0",
-		"husky": "^8.0.3",
-		"typescript": "^5.2.2"
-	}
+  "name": "generate-manifest",
+  "version": "0.1.0",
+  "description": "GitHub Action to generate manifest files for NodeJS projects",
+  "main": "dist/index.js",
+  "scripts": {
+    "biome": "biome check .",
+    "biome:fix": "biome check . --apply",
+    "biome:fix-unsafe": "biome check . --apply-unsafe",
+    "prepare": "husky install",
+    "pack": "ncc build src/index.ts -o dist",
+    "pack:sourcemap": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
+  },
+  "author": "Fernando A. Maule <fer@maule.pro>",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.2.2",
+    "@octokit/webhooks-definitions": "^3.67.3",
+    "@types/node": "^20.8.4",
+    "@vercel/ncc": "^0.38.0",
+    "husky": "^8.0.3",
+    "typescript": "^5.2.2"
+  }
 }
