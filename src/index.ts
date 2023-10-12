@@ -82,10 +82,10 @@ try {
   const writePackageInfo = core.getBooleanInput("package-info");
   const writeActionInfo = core.getBooleanInput("action-info");
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
-  const manifestName = core.getInput("manifest-name");
+  const manifestFile = core.getInput("manifest-file");
 
   core.debug(
-    `Manifest ${manifestName} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`,
+    `Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`,
   );
 
   const timestamp = new Date().toISOString();
@@ -98,20 +98,20 @@ try {
   };
 
   fs.writeFileSync(
-    manifestName,
+    manifestFile,
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf-8",
   );
 
   if (appendDockerFile) {
-    writeDockerFile(manifestName);
+    writeDockerFile(manifestFile);
   }
 
   appendDockerFile
     ? core.info(
-        `📝 Manifest: ${manifestName} + COPY to Dockerfile sadfaskfkdsfadsfasdfsda`,
+        `📝 Manifest: ${manifestFile} + COPY to Dockerfile sadfaskfkdsfadsfasdfsda`,
       )
-    : core.info(`📝 Manifest: ${manifestName} asdfsdafsdfsafdafdfdas`);
+    : core.info(`📝 Manifest: ${manifestFile} asdfsdafsdfsafdafdfdas`);
 } catch (e) {
   core.error(e as Error);
   core.setFailed((e as Error).message);

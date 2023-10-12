@@ -1,26 +1,29 @@
-name: 'Generate manifest.json'
-description: 'Generates a manifest.json based on refs / package.json'
+name: 'Generate build manifest'
+description: 'Generates a build manifest JSON based on refs / package.json'
+branding:
+  icon: 'database'
+  color: 'blue'
 inputs:
   scm-info:
     description: 'Get information from SCM/GitHub'
     required: false
-    default: 'on'
+    default: 'true'
   package-info:
     description: 'Get information from package.json'
     required: false
-    default: 'on'
+    default: 'true'
   action-info:
     description: 'Write GitHub action info in the manifest'
     required: false
-    default: 'on'
+    default: 'true'
   append-dockerfile:
-    description: 'Automatically append COPY command on Dockerfile'
+    description: 'Automatically append COPY command in Dockerfile'
     required: false
-    default: 'on'
-  manifest-name:
-    description: 'Filename for manifest'
+    default: 'true'
+  manifest-file:
+    description: 'Manifest filename'
     required: false
-    default: 'manifest.json'
+    default: 'build-manifest.json'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
