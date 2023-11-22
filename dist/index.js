@@ -29838,8 +29838,8 @@ try {
         writeDockerFile(manifestFile);
     }
     appendDockerFile
-        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile sadfaskfkdsfadsfasdfsda`)
-        : core.info(`📝 Manifest: ${manifestFile} asdfsdafsdfsafdafdfdas`);
+        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile`)
+        : core.info(`📝 Manifest: ${manifestFile}`);
 }
 catch (e) {
     core.error(e);
