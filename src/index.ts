@@ -9,8 +9,6 @@ import {
   WorkflowDispatchEvent,
 } from "@octokit/webhooks-definitions/schema";
 
-const getBool = (input: string): boolean => (input === "on" ? true : false);
-
 const getPackageInfo = (): Package => {
   const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
   const packageJson = require(packageJsonLocation);
