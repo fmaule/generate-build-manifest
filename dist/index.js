@@ -29769,7 +29769,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const getBool = (input) => (input === "on" ? true : false);
 const getPackageInfo = () => {
     const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
     const packageJson = require(packageJsonLocation);
