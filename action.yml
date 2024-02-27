@@ -24,6 +24,9 @@ inputs:
     description: 'Manifest filename'
     required: false
     default: 'build-manifest.json'
+outputs:
+  manifest-content:
+    description: 'The content of the generated manifest'
 runs:
   using: 'node20'
   main: 'dist/index.js'

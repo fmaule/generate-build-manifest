@@ -29832,13 +29832,16 @@ try {
         ...(writePackageInfo && getPackageInfo()),
         ...(writeActionInfo && getActionInfo()),
     };
-    fs_1.default.writeFileSync(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`, "utf-8");
+    const manifestContent = `${JSON.stringify(manifest, null, 2)}\n`;
+    fs_1.default.writeFileSync(manifestFile, manifestContent, "utf-8");
     if (appendDockerFile) {
         writeDockerFile(manifestFile);
     }
     appendDockerFile
-        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile`)
+        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile new`)
         : core.info(`📝 Manifest: ${manifestFile}`);
+    core.info(`Manifest content \n${manifestContent}\n`);
+    core.setOutput("manifest-content", manifestContent);
 }
 catch (e) {
     core.error(e);
