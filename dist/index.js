@@ -29813,6 +29813,9 @@ const getScm = () => {
 const writeDockerFile = (manifestName) => {
     const dockerCommand = `\nCOPY ${manifestName} ./\n`;
     const dockerFile = `${process.env.GITHUB_WORKSPACE}/Dockerfile`;
+    if (!fs_1.default.existsSync(dockerFile)) {
+        throw new Error("Docker file not found. Make sure you have one or turn off the option if not needed (see README)");
+    }
     core.debug(`Appending command to docker file (${dockerFile}): ${dockerCommand}`);
     fs_1.default.appendFileSync(dockerFile, dockerCommand);
 };

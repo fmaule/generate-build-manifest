@@ -101,4 +101,4 @@ Any contribution or suggestion is more than welcome. Please open an issue or sub
 
 **Q: What if I don't want certain information, like GitHub action details, in my manifest?**
 
-- **A:** This action is flexible. You can easily customize the content of the manifest by using the provided inputs. For instance, if you don't want the GitHub action details in your manifest, you can set the `action-info` input to `false`. to false.
+- **A:** This action is flexible. You can easily customize the content of the manifest by using the provided inputs. For instance, if you don't want the GitHub action details in your manifest, you can set the `action-info` input to `false`.
