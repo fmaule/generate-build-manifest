@@ -26,10 +26,9 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 | ----------------------- | ----------------------------------------------- | --------------------- | ------------ |
 | **`scm-info`**          | Get information from SCM/GitHub                 | `true`                | **false**    |
 | **`package-info`**      | Get information from package.json               | `true`                | **false**    |
-| **`project-name`**      | Project name                                    | `""`                  | **false**    |
-| **`project-version`**   | Project version                                 | `""`                  | **false**    |
 | **`action-info`**       | Write GitHub action info in the manifest        | `true`                | **false**    |
 | **`append-dockerfile`** | Automatically append COPY command in Dockerfile | `true`                | **false**    |
+| **`dockerfile-path`**   | Provide the (relative) path for the Dockerfile  | `.`                   | **false**    |
 | **`manifest-file`**     | Manifest filename                               | `build-manifest.json` | **false**    |
 
 <!-- end inputs -->
@@ -44,14 +43,13 @@ with:
   action-info: false # disable writing action information to manifest (just an example)
 ```
 
-Pass name and version instead of reading it from the package.json
+Provide a custom path for the Dockerfile
 
 ```yaml
 uses: fmaule/generate-build-manifest@v2
 with:
-  package-info: false
-  project-name: 'my-project'
-  project-version: '1.0.0'
+  # imagining you have a libs folder with the service inside of it 
+  dockerfile-path: './libs/service1'
 ```
 
 ### Full Usage Example
