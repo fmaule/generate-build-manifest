@@ -48,7 +48,7 @@ Provide a custom path for the Dockerfile
 ```yaml
 uses: fmaule/generate-build-manifest@v2
 with:
-  # imagining you have a libs folder with the service inside of it 
+  # assuming you have a 'libs' folder that includes the service
   dockerfile-path: './libs/service1'
 ```
 
