@@ -63,9 +63,14 @@ const getScm = (): { scm: SCM | null } => {
   return { scm };
 };
 
-const writeDockerFile = (manifestName: string) => {
+const writeDockerFile = (dockerfilePath: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  const dockerFile = `${process.env.GITHUB_WORKSPACE}/Dockerfile`;
+  const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
+  if (!fs.existsSync(dockerFile)) {
+    throw new Error(
+      "Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)",
+    );
+  }
   core.debug(
     `Appending command to docker file (${dockerFile}): ${dockerCommand}`,
   );
@@ -79,6 +84,7 @@ try {
   const writeScm = core.getBooleanInput("scm-info");
   const writePackageInfo = core.getBooleanInput("package-info");
   const writeActionInfo = core.getBooleanInput("action-info");
+  const dockerFilePath = core.getInput("dockerfile-path");
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestFile = core.getInput("manifest-file");
 
@@ -95,19 +101,18 @@ try {
     ...(writeActionInfo && getActionInfo()),
   };
 
-  fs.writeFileSync(
-    manifestFile,
-    `${JSON.stringify(manifest, null, 2)}\n`,
-    "utf-8",
-  );
+  const manifestContent = `${JSON.stringify(manifest, null, 2)}\n`;
+  fs.writeFileSync(manifestFile, manifestContent, "utf-8");
 
   if (appendDockerFile) {
-    writeDockerFile(manifestFile);
+    writeDockerFile(dockerFilePath, manifestFile);
   }
 
   appendDockerFile
     ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile`)
     : core.info(`📝 Manifest: ${manifestFile}`);
+
+  core.setOutput("manifest-content", manifestContent);
 } catch (e) {
   core.error(e as Error);
   core.setFailed((e as Error).message);
