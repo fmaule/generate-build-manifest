@@ -68,7 +68,7 @@ const writeDockerFile = (dockerfilePath: string, manifestName: string) => {
   const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
   if (!fs.existsSync(dockerFile)) {
     throw new Error(
-      "Dockerfile not found. Make sure you have one or turn off the option if not needed (see README)",
+      "Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)",
     );
   }
   core.debug(
