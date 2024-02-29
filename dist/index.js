@@ -29814,7 +29814,7 @@ const writeDockerFile = (dockerfilePath, manifestName) => {
     const dockerCommand = `\nCOPY ${manifestName} ./\n`;
     const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
     if (!fs_1.default.existsSync(dockerFile)) {
-        throw new Error("Dockerfile not found. Make sure you have one or turn off the option if not needed (see README)");
+        throw new Error("Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)");
     }
     core.debug(`Appending command to docker file (${dockerFile}): ${dockerCommand}`);
     fs_1.default.appendFileSync(dockerFile, dockerCommand);
@@ -29842,9 +29842,8 @@ try {
         writeDockerFile(dockerFilePath, manifestFile);
     }
     appendDockerFile
-        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile new`)
+        ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile`)
         : core.info(`📝 Manifest: ${manifestFile}`);
-    core.info(`Manifest content \n${manifestContent}\n`);
     core.setOutput("manifest-content", manifestContent);
 }
 catch (e) {
