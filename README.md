@@ -22,14 +22,14 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 <!-- start inputs -->
 
-| **Input**               | **Description**                                 | **Default**           | **Required** |
-| ----------------------- | ----------------------------------------------- | --------------------- | ------------ |
-| **`scm-info`**          | Get information from SCM/GitHub                 | `true`                | **false**    |
-| **`package-info`**      | Get information from package.json               | `true`                | **false**    |
-| **`action-info`**       | Write GitHub action info in the manifest        | `true`                | **false**    |
-| **`append-dockerfile`** | Automatically append COPY command in Dockerfile | `true`                | **false**    |
-| **`dockerfile-path`**   | Provide the (relative) path for the Dockerfile  | `.`                   | **false**    |
-| **`manifest-file`**     | Manifest filename                               | `build-manifest.json` | **false**    |
+| **Input**               | **Description**                                                                       | **Default**           | **Required** |
+| ----------------------- | ------------------------------------------------------------------------------------- | --------------------- | ------------ |
+| **`scm-info`**          | Get information from SCM/GitHub                                                       | `true`                | **false**    |
+| **`package-info`**      | Get information from package.json                                                     | `true`                | **false**    |
+| **`action-info`**       | Write GitHub action info in the manifest                                              | `true`                | **false**    |
+| **`append-dockerfile`** | Automatically append COPY command in Dockerfile                                       | `true`                | **false**    |
+| **`working-directory`** | Path (relative) where the dockerfile is stored and where the manifest will be written | `.`                   | **false**    |
+| **`manifest-file`**     | Manifest filename                                                                     | `build-manifest.json` | **false**    |
 
 <!-- end inputs -->
 
@@ -49,7 +49,7 @@ Provide a custom path for the Dockerfile
 uses: fmaule/generate-build-manifest@v2
 with:
   # assuming you have a 'libs' folder that includes the service
-  dockerfile-path: './libs/service1'
+  working-directory: './libs/service1'
 ```
 
 ### Full Usage Example
