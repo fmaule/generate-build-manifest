@@ -11,6 +11,7 @@ export interface Package {
 
 export interface ActionInfo {
   workflow?: string;
+  runNumber?: number;
   runner?: {
     arch?: string;
     name?: string;
