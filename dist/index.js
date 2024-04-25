@@ -29777,11 +29777,15 @@ const getPackageInfo = () => {
 };
 const getActionInfo = () => {
     const workflow = process.env.GITHUB_WORKFLOW;
+    const runNumber = process.env.GITHUB_RUN_NUMBER
+        ? parseInt(process.env.GITHUB_RUN_NUMBER, 10)
+        : undefined;
     const runnerArch = process.env.RUNNER_ARCH;
     const runnerName = process.env.RUNNER_NAME;
     const runnerOs = process.env.RUNNER_OS;
     const ghAction = {
         workflow,
+        runNumber,
         runner: {
             arch: runnerArch,
             name: runnerName,
