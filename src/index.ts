@@ -69,16 +69,15 @@ const getScm = (): { scm: SCM | null } => {
 
 const writeDockerFile = (dockerfilePath: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
-  if (!fs.existsSync(dockerFile)) {
+  if (!fs.existsSync(dockerfilePath)) {
     throw new Error(
-      "Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)",
+      `Dockerfile ${dockerfilePath} not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
     );
   }
   core.debug(
-    `Appending command to docker file (${dockerFile}): ${dockerCommand}`,
+    `Appending command to docker file (${dockerfilePath}): ${dockerCommand}`,
   );
-  fs.appendFileSync(dockerFile, dockerCommand);
+  fs.appendFileSync(dockerfilePath, dockerCommand);
 };
 
 try {

@@ -17,9 +17,9 @@ inputs:
     required: false
     default: 'true'
   dockerfile-path:
-    description: 'Dockerfile path'
+    description: 'Location of your Dockerfile path (eg ./Dockerfile or /home/runner/work/[..]/Dockerfile)'
     required: false
-    default: '.'
+    default: './Dockerfile'
   append-dockerfile:
     description: 'Automatically append COPY command in Dockerfile'
     required: false

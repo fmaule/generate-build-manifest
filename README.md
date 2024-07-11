@@ -10,7 +10,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 ```yaml
 - name: Generate manifest
-  uses: fmaule/generate-build-manifest@v2
+  uses: fmaule/generate-build-manifest@v3
 ```
 
 ## 📋 Prerequisites
@@ -28,7 +28,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 | **`package-info`**      | Get information from package.json               | `true`                | **false**    |
 | **`action-info`**       | Write GitHub action info in the manifest        | `true`                | **false**    |
 | **`append-dockerfile`** | Automatically append COPY command in Dockerfile | `true`                | **false**    |
-| **`dockerfile-path`**   | Provide the (relative) path for the Dockerfile  | `.`                   | **false**    |
+| **`dockerfile-path`**   | Set the Dockerfile path (to be used with append-dockerfile) | `./Dockerfile`         | **false**    |
 | **`manifest-file`**     | Manifest filename                               | `build-manifest.json` | **false**    |
 
 <!-- end inputs -->
@@ -38,7 +38,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 Simple example:
 
 ```yaml
-uses: fmaule/generate-build-manifest@v2
+uses: fmaule/generate-build-manifest@v3
 with:
   action-info: false # disable writing action information to manifest (just an example)
 ```
@@ -46,10 +46,10 @@ with:
 Provide a custom path for the Dockerfile
 
 ```yaml
-uses: fmaule/generate-build-manifest@v2
+uses: fmaule/generate-build-manifest@v3
 with:
   # assuming you have a 'libs' folder that includes the service
-  dockerfile-path: './libs/service1'
+  dockerfile-path: './libs/service1/Dockerfile'
 ```
 
 ### Full Usage Example
@@ -62,7 +62,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Generate manifest
-        uses: fmaule/generate-build-manifest@v2
+        uses: fmaule/generate-build-manifest@v3
         with:
           action-info: false # disable writing action information to manifest
 

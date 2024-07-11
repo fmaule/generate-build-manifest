@@ -21,10 +21,10 @@
   "devDependencies": {
     "@biomejs/biome": "1.2.2",
     "@octokit/webhooks-definitions": "^3.67.3",
-    "@types/node": "^20.8.4",
-    "@vercel/ncc": "^0.38.0",
-    "github-action-readme-generator": "^1.2.7",
+    "@types/node": "^20.14.10",
+    "@vercel/ncc": "^0.38.1",
+    "github-action-readme-generator": "^1.8.0",
     "husky": "^8.0.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.5.3"
   }
 }
