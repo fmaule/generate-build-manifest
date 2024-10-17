@@ -20,8 +20,8 @@ inputs:
     description: 'Path to package.json'
     required: false
     default: '.'
-  dockerfile-path:
-    description: 'Dockerfile path'
+  dockerfile:
+    description: 'Dockerfile path (included dockerfile name)'
     required: false
     default: '.'
   append-dockerfile:
