@@ -29769,8 +29769,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const getPackageInfo = () => {
-    const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
+const getPackageInfo = (packageJsonPath) => {
+    const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`;
+    // const packageJsonLocation = packageJsonPath
+    //   ? `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`
+    //   : `${process.env.GITHUB_WORKSPACE}/package.json`;
     const packageJson = require(packageJsonLocation);
     const { name, version } = packageJson;
     return { name, version };
@@ -29814,9 +29817,9 @@ const getScm = () => {
     };
     return { scm };
 };
-const writeDockerFile = (dockerfilePath, manifestName) => {
+const writeDockerFile = (dockerfile, manifestName) => {
     const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-    const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
+    const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfile}`;
     if (!fs_1.default.existsSync(dockerFile)) {
         throw new Error("Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)");
     }
@@ -29829,7 +29832,8 @@ try {
     const writeScm = core.getBooleanInput("scm-info");
     const writePackageInfo = core.getBooleanInput("package-info");
     const writeActionInfo = core.getBooleanInput("action-info");
-    const dockerFilePath = core.getInput("dockerfile-path");
+    const packageJsonPath = core.getInput("package-json-path");
+    const dockerFile = core.getInput("dockerfile");
     const appendDockerFile = core.getBooleanInput("append-dockerfile");
     const manifestFile = core.getInput("manifest-file");
     core.debug(`Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`);
@@ -29837,13 +29841,13 @@ try {
     const manifest = {
         timestamp,
         ...(writeScm && getScm()),
-        ...(writePackageInfo && getPackageInfo()),
+        ...(writePackageInfo && getPackageInfo(packageJsonPath)),
         ...(writeActionInfo && getActionInfo()),
     };
     const manifestContent = `${JSON.stringify(manifest, null, 2)}\n`;
     fs_1.default.writeFileSync(manifestFile, manifestContent, "utf-8");
     if (appendDockerFile) {
-        writeDockerFile(dockerFilePath, manifestFile);
+        writeDockerFile(dockerFile, manifestFile);
     }
     appendDockerFile
         ? core.info(`📝 Manifest: ${manifestFile} + COPY to Dockerfile`)
