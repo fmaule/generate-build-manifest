@@ -9,8 +9,12 @@ import {
   WorkflowDispatchEvent,
 } from "@octokit/webhooks-definitions/schema";
 
-const getPackageInfo = (): Package => {
-  const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
+const getPackageInfo = (packageJsonPath: string): Package => {
+  const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`;
+  // const packageJsonLocation = packageJsonPath
+  //   ? `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`
+  //   : `${process.env.GITHUB_WORKSPACE}/package.json`;
+
   const packageJson = require(packageJsonLocation);
   const { name, version } = packageJson;
   return { name, version };
@@ -88,6 +92,7 @@ try {
   const writeScm = core.getBooleanInput("scm-info");
   const writePackageInfo = core.getBooleanInput("package-info");
   const writeActionInfo = core.getBooleanInput("action-info");
+  const packageJsonPath = core.getInput("package-json-path");
   const dockerFilePath = core.getInput("dockerfile-path");
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestFile = core.getInput("manifest-file");
@@ -101,7 +106,7 @@ try {
   const manifest: Manifest = {
     timestamp,
     ...(writeScm && getScm()),
-    ...(writePackageInfo && getPackageInfo()),
+    ...(writePackageInfo && getPackageInfo(packageJsonPath)),
     ...(writeActionInfo && getActionInfo()),
   };
 

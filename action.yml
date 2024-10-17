@@ -16,6 +16,10 @@ inputs:
     description: 'Write GitHub action info in the manifest'
     required: false
     default: 'true'
+  package-json-path:
+    description: 'Path to package.json'
+    required: false
+    default: '.'
   dockerfile-path:
     description: 'Dockerfile path'
     required: false
