@@ -29771,9 +29771,6 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const getPackageInfo = (packageJsonPath) => {
     const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`;
-    // const packageJsonLocation = packageJsonPath
-    //   ? `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`
-    //   : `${process.env.GITHUB_WORKSPACE}/package.json`;
     const packageJson = require(packageJsonLocation);
     const { name, version } = packageJson;
     return { name, version };
@@ -29819,11 +29816,8 @@ const getScm = () => {
 };
 const writeDockerFile = (dockerfile, manifestName) => {
     const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-    // log dockerfile path
     const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfile}`;
-    core.info(`Dockerfile path: ${dockerFile}`);
     if (!fs_1.default.existsSync(dockerFile)) {
-        // list files in the workspace
         throw new Error("Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)");
     }
     core.debug(`Appending command to docker file (${dockerFile}): ${dockerCommand}`);
