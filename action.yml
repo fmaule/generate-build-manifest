@@ -23,7 +23,7 @@ inputs:
   dockerfile:
     description: 'Dockerfile path (included dockerfile name)'
     required: false
-    default: '.'
+    default: './Dockerfile'
   append-dockerfile:
     description: 'Automatically append COPY command in Dockerfile'
     required: false
