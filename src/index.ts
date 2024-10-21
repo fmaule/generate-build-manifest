@@ -70,7 +70,11 @@ const getScm = (): { scm: SCM | null } => {
 
 const writeDockerFile = (dockerfile: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfile}`;
+  // if dockerfile is default (./Dockerfile), we need to get the full path, otherwise we can use only the input provided
+  const dockerFile =
+    dockerfile === "./Dockerfile"
+      ? `${process.env.GITHUB_WORKSPACE}/${dockerfile}`
+      : dockerfile;
   core.info(`Dockerfile path: ${dockerFile}`);
   if (!fs.existsSync(dockerFile)) {
     throw new Error(
