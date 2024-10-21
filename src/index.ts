@@ -70,21 +70,24 @@ const getScm = (): { scm: SCM | null } => {
 
 const writeDockerFile = (dockerfile: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  // if dockerfile is default (./Dockerfile), we need to get the full path, otherwise we can use only the input provided
-  const dockerFile =
-    dockerfile === "./Dockerfile"
-      ? `${process.env.GITHUB_WORKSPACE}/${dockerfile}`
-      : dockerfile;
-  core.info(`Dockerfile path: ${dockerFile}`);
-  if (!fs.existsSync(dockerFile)) {
+  // try to read the dockerfile from the path provided, if not found, try to search in the GITHUB_WORKSPACE
+  let dockerfilePath = dockerfile;
+  if (!fs.existsSync(dockerfilePath)) {
+    core.warning(
+      `Dockerfile not found at ${dockerfilePath}, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`,
+    );
+    dockerfilePath = `${process.env.GITHUB_WORKSPACE}/${dockerfile}`;
+  }
+  core.info(`Dockerfile path: ${dockerfilePath}`);
+  if (!fs.existsSync(dockerfilePath)) {
     throw new Error(
-      "Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)",
+      `Dockerfile not found in ${dockerfilePath}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
     );
   }
   core.debug(
-    `Appending command to docker file (${dockerFile}): ${dockerCommand}`,
+    `Appending command to docker file (${dockerfilePath}): ${dockerCommand}`,
   );
-  fs.appendFileSync(dockerFile, dockerCommand);
+  fs.appendFileSync(dockerfilePath, dockerCommand);
 };
 
 try {
