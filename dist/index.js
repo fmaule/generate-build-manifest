@@ -29784,8 +29784,8 @@ const getFilePath = (filePath) => {
 };
 const getPackageInfo = (packageJson) => {
     const packageJsonLocation = getFilePath(packageJson);
-    const packageJsonContent = require(packageJsonLocation);
-    const { name, version } = packageJsonContent;
+    const packageJsonContent = fs_1.default.readFileSync(packageJsonLocation, "utf-8");
+    const { name, version } = JSON.parse(packageJsonContent);
     return { name, version };
 };
 const getActionInfo = () => {

@@ -32,8 +32,8 @@ const getFilePath = (filePath: string) => {
 const getPackageInfo = (packageJson: string): Package => {
   const packageJsonLocation = getFilePath(packageJson);
 
-  const packageJsonContent = require(packageJsonLocation);
-  const { name, version } = packageJsonContent;
+  const packageJsonContent = fs.readFileSync(packageJsonLocation, "utf-8");
+  const { name, version } = JSON.parse(packageJsonContent);
   return { name, version };
 };
 
