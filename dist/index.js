@@ -29772,12 +29772,10 @@ const github = __importStar(__nccwpck_require__(5438));
 // first we attempt to read the file from the path provided, if not found, we try to search in the GITHUB_WORKSPACE
 const getFilePath = (filePath) => {
     let fileLocation = filePath;
-    core.info(`Checking if ${fileLocation} exists`);
     if (!fs_1.default.existsSync(fileLocation)) {
         core.warning(`${fileLocation} not found, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`);
         fileLocation = `${process.env.GITHUB_WORKSPACE}/${filePath}`;
     }
-    core.info(`Checking if ${fileLocation} exists`);
     if (!fs_1.default.existsSync(fileLocation)) {
         throw new Error(`${filePath} not found in ${fileLocation}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`);
     }
@@ -29845,7 +29843,6 @@ try {
     const dockerFile = core.getInput("dockerfile");
     const appendDockerFile = core.getBooleanInput("append-dockerfile");
     const manifestFile = core.getInput("manifest-file");
-    core.info(`package.json: ${packageJson}`);
     core.debug(`Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`);
     const timestamp = new Date().toISOString();
     const manifest = {
