@@ -13,12 +13,14 @@ import {
 const getFilePath = (filePath: string) => {
   let fileLocation = filePath;
 
+  core.info(`Checking if ${fileLocation} exists`);
   if (!fs.existsSync(fileLocation)) {
     core.warning(
       `${fileLocation} not found, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`,
     );
     fileLocation = `${process.env.GITHUB_WORKSPACE}/${filePath}`;
   }
+  core.info(`Checking if ${fileLocation} exists`);
   if (!fs.existsSync(fileLocation)) {
     throw new Error(
       `${filePath} not found in ${fileLocation}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
