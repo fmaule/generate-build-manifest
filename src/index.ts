@@ -9,11 +9,31 @@ import {
   WorkflowDispatchEvent,
 } from "@octokit/webhooks-definitions/schema";
 
-const getPackageInfo = (packageJsonPath: string): Package => {
-  const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/${packageJsonPath}/package.json`;
+// first we attempt to read the file from the path provided, if not found, we try to search in the GITHUB_WORKSPACE
+const getFilePath = (filePath: string) => {
+  let fileLocation = filePath;
 
-  const packageJson = require(packageJsonLocation);
-  const { name, version } = packageJson;
+  if (!fs.existsSync(fileLocation)) {
+    core.warning(
+      `${fileLocation} not found, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`,
+    );
+    fileLocation = `${process.env.GITHUB_WORKSPACE}/${filePath}`;
+  }
+  if (!fs.existsSync(fileLocation)) {
+    throw new Error(
+      `${filePath} not found in ${fileLocation}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
+    );
+  }
+
+  // file is found, return the path
+  return fileLocation;
+};
+
+const getPackageInfo = (packageJson: string): Package => {
+  const packageJsonLocation = getFilePath(packageJson);
+
+  const packageJsonContent = require(packageJsonLocation);
+  const { name, version } = packageJsonContent;
   return { name, version };
 };
 
@@ -70,24 +90,12 @@ const getScm = (): { scm: SCM | null } => {
 
 const writeDockerFile = (dockerfile: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  // try to read the dockerfile from the path provided, if not found, try to search in the GITHUB_WORKSPACE
-  let dockerfilePath = dockerfile;
-  if (!fs.existsSync(dockerfilePath)) {
-    core.warning(
-      `Dockerfile not found at ${dockerfilePath}, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`,
-    );
-    dockerfilePath = `${process.env.GITHUB_WORKSPACE}/${dockerfile}`;
-  }
-  core.info(`Dockerfile path: ${dockerfilePath}`);
-  if (!fs.existsSync(dockerfilePath)) {
-    throw new Error(
-      `Dockerfile not found in ${dockerfilePath}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
-    );
-  }
+
+  const dockerFilePath = getFilePath(dockerfile);
   core.debug(
-    `Appending command to docker file (${dockerfilePath}): ${dockerCommand}`,
+    `Appending command to docker file (${dockerFilePath}): ${dockerCommand}`,
   );
-  fs.appendFileSync(dockerfilePath, dockerCommand);
+  fs.appendFileSync(dockerFilePath, dockerCommand);
 };
 
 try {
@@ -97,7 +105,7 @@ try {
   const writeScm = core.getBooleanInput("scm-info");
   const writePackageInfo = core.getBooleanInput("package-info");
   const writeActionInfo = core.getBooleanInput("action-info");
-  const packageJsonPath = core.getInput("package-json-path");
+  const packageJson = core.getInput("package-json");
   const dockerFile = core.getInput("dockerfile");
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestFile = core.getInput("manifest-file");
@@ -111,7 +119,7 @@ try {
   const manifest: Manifest = {
     timestamp,
     ...(writeScm && getScm()),
-    ...(writePackageInfo && getPackageInfo(packageJsonPath)),
+    ...(writePackageInfo && getPackageInfo(packageJson)),
     ...(writeActionInfo && getActionInfo()),
   };
 
