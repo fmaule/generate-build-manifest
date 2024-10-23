@@ -112,6 +112,8 @@ try {
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestFile = core.getInput("manifest-file");
 
+  core.info(`package.json: ${packageJson}`);
+
   core.debug(
     `Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`,
   );

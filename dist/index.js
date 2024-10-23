@@ -29845,6 +29845,7 @@ try {
     const dockerFile = core.getInput("dockerfile");
     const appendDockerFile = core.getBooleanInput("append-dockerfile");
     const manifestFile = core.getInput("manifest-file");
+    core.info(`package.json: ${packageJson}`);
     core.debug(`Manifest ${manifestFile} being generated with SCM: ${writeScm}, package.json info: ${writePackageInfo}, action info: ${writeActionInfo}`);
     const timestamp = new Date().toISOString();
     const manifest = {
