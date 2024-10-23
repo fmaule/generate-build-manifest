@@ -22,14 +22,15 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 <!-- start inputs -->
 
-| **Input**               | **Description**                                 | **Default**           | **Required** |
-| ----------------------- | ----------------------------------------------- | --------------------- | ------------ |
-| **`scm-info`**          | Get information from SCM/GitHub                 | `true`                | **false**    |
-| **`package-info`**      | Get information from package.json               | `true`                | **false**    |
-| **`action-info`**       | Write GitHub action info in the manifest        | `true`                | **false**    |
-| **`append-dockerfile`** | Automatically append COPY command in Dockerfile | `true`                | **false**    |
-| **`dockerfile-path`**   | Provide the (relative) path for the Dockerfile  | `.`                   | **false**    |
-| **`manifest-file`**     | Manifest filename                               | `build-manifest.json` | **false**    |
+| **Input**               | **Description**                                                           | **Default**           | **Required** |
+| ----------------------- | ------------------------------------------------------------------------- | --------------------- | ------------ |
+| **`scm-info`**          | Get information from SCM/GitHub                                           | `true`                | **false**    |
+| **`package-info`**      | Get information from package.json                                         | `true`                | **false**    |
+| **`action-info`**       | Write GitHub action info in the manifest                                  | `true`                | **false**    |
+| **`package-json`**      | Provide the (relative) path for the package.json (name included)          | `./package.json`      | **false**    |
+| **`dockerfile`**        | Provide the (relative) path for the Dockerfile (name included)            | `./Dockerfile`        | **false**    |
+| **`append-dockerfile`** | Automatically append COPY command in Dockerfile                           | `true`                | **false**    |
+| **`manifest-file`**     | Manifest filename                                                         | `build-manifest.json` | **false**    |
 
 <!-- end inputs -->
 
@@ -43,13 +44,14 @@ with:
   action-info: false # disable writing action information to manifest (just an example)
 ```
 
-Provide a custom path for the Dockerfile
+Provide custom Dockerfile and package.json:
 
 ```yaml
 uses: fmaule/generate-build-manifest@v2
 with:
   # assuming you have a 'libs' folder that includes the service
-  dockerfile-path: './libs/service1'
+  dockerfile: './libs/service1/my-dockerfile'
+  package-json: './libs/service1/package.json'
 ```
 
 ### Full Usage Example
