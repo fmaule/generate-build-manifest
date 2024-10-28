@@ -15,16 +15,16 @@
   "author": "Fernando A. Maule <fer@maule.pro>",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.10.1",
+    "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.2.2",
-    "@octokit/webhooks-definitions": "^3.67.3",
-    "@types/node": "^20.8.4",
-    "@vercel/ncc": "^0.38.0",
-    "github-action-readme-generator": "^1.2.7",
+    "@octokit/webhooks-definitions": "^3.68.1",
+    "@types/node": "^20.17.1",
+    "@vercel/ncc": "^0.38.2",
+    "github-action-readme-generator": "^1.8.0",
     "husky": "^8.0.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.6.3"
   }
 }
