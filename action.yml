@@ -16,10 +16,14 @@ inputs:
     description: 'Write GitHub action info in the manifest'
     required: false
     default: 'true'
-  dockerfile-path:
-    description: 'Dockerfile path'
+  package-json:
+    description: 'package.json path (included package.json name)'
     required: false
-    default: '.'
+    default: './package.json'
+  dockerfile:
+    description: 'Dockerfile path (included dockerfile name)'
+    required: false
+    default: './Dockerfile'
   append-dockerfile:
     description: 'Automatically append COPY command in Dockerfile'
     required: false

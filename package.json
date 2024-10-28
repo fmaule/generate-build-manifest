@@ -1,6 +1,6 @@
 {
   "name": "generate-build-manifest",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "GitHub Action to generate manifest files for NodeJS projects",
   "main": "dist/index.js",
   "scripts": {

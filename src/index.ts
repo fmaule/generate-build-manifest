@@ -9,10 +9,31 @@ import {
   WorkflowDispatchEvent,
 } from "@octokit/webhooks-definitions/schema";
 
-const getPackageInfo = (): Package => {
-  const packageJsonLocation = `${process.env.GITHUB_WORKSPACE}/package.json`;
-  const packageJson = require(packageJsonLocation);
-  const { name, version } = packageJson;
+// first we attempt to read the file from the path provided, if not found, we try to search in the GITHUB_WORKSPACE
+const getFilePath = (filePath: string) => {
+  let fileLocation = filePath;
+
+  if (!fs.existsSync(fileLocation)) {
+    core.warning(
+      `${fileLocation} not found, searching in the GITHUB_WORKSPACE ${process.env.GITHUB_WORKSPACE}`,
+    );
+    fileLocation = `${process.env.GITHUB_WORKSPACE}/${filePath}`;
+  }
+  if (!fs.existsSync(fileLocation)) {
+    throw new Error(
+      `${filePath} not found in ${fileLocation}. Make sure you have one or turn off the append-dockerfile option if not needed (see README)`,
+    );
+  }
+
+  // file is found, return the path
+  return fileLocation;
+};
+
+const getPackageInfo = (packageJson: string): Package => {
+  const packageJsonLocation = getFilePath(packageJson);
+
+  const packageJsonContent = fs.readFileSync(packageJsonLocation, "utf-8");
+  const { name, version } = JSON.parse(packageJsonContent);
   return { name, version };
 };
 
@@ -67,18 +88,14 @@ const getScm = (): { scm: SCM | null } => {
   return { scm };
 };
 
-const writeDockerFile = (dockerfilePath: string, manifestName: string) => {
+const writeDockerFile = (dockerfile: string, manifestName: string) => {
   const dockerCommand = `\nCOPY ${manifestName} ./\n`;
-  const dockerFile = `${process.env.GITHUB_WORKSPACE}/${dockerfilePath}/Dockerfile`;
-  if (!fs.existsSync(dockerFile)) {
-    throw new Error(
-      "Dockerfile not found. Make sure you have one or turn off the append-dockerfile option if not needed (see README)",
-    );
-  }
+
+  const dockerFilePath = getFilePath(dockerfile);
   core.debug(
-    `Appending command to docker file (${dockerFile}): ${dockerCommand}`,
+    `Appending command to docker file (${dockerFilePath}): ${dockerCommand}`,
   );
-  fs.appendFileSync(dockerFile, dockerCommand);
+  fs.appendFileSync(dockerFilePath, dockerCommand);
 };
 
 try {
@@ -88,7 +105,8 @@ try {
   const writeScm = core.getBooleanInput("scm-info");
   const writePackageInfo = core.getBooleanInput("package-info");
   const writeActionInfo = core.getBooleanInput("action-info");
-  const dockerFilePath = core.getInput("dockerfile-path");
+  const packageJson = core.getInput("package-json");
+  const dockerFile = core.getInput("dockerfile");
   const appendDockerFile = core.getBooleanInput("append-dockerfile");
   const manifestFile = core.getInput("manifest-file");
 
@@ -101,7 +119,7 @@ try {
   const manifest: Manifest = {
     timestamp,
     ...(writeScm && getScm()),
-    ...(writePackageInfo && getPackageInfo()),
+    ...(writePackageInfo && getPackageInfo(packageJson)),
     ...(writeActionInfo && getActionInfo()),
   };
 
@@ -109,7 +127,7 @@ try {
   fs.writeFileSync(manifestFile, manifestContent, "utf-8");
 
   if (appendDockerFile) {
-    writeDockerFile(dockerFilePath, manifestFile);
+    writeDockerFile(dockerFile, manifestFile);
   }
 
   appendDockerFile
