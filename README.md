@@ -10,7 +10,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 
 ```yaml
 - name: Generate manifest
-  uses: fmaule/generate-build-manifest@v2
+  uses: fmaule/generate-build-manifest@v3
 ```
 
 ## 📋 Prerequisites
@@ -27,8 +27,8 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 | **`scm-info`**          | Get information from SCM/GitHub                                           | `true`                | **false**    |
 | **`package-info`**      | Get information from package.json                                         | `true`                | **false**    |
 | **`action-info`**       | Write GitHub action info in the manifest                                  | `true`                | **false**    |
-| **`package-json`**      | Provide the (relative) path for the package.json (name included)          | `./package.json`      | **false**    |
-| **`dockerfile`**        | Provide the (relative) path for the Dockerfile (name included)            | `./Dockerfile`        | **false**    |
+| **`package-json`**      | Provide the path for the package.json (name included)                     | `./package.json`      | **false**    |
+| **`dockerfile`**        | Provide the path for the Dockerfile (name included)                       | `./Dockerfile`        | **false**    |
 | **`append-dockerfile`** | Automatically append COPY command in Dockerfile                           | `true`                | **false**    |
 | **`manifest-file`**     | Manifest filename                                                         | `build-manifest.json` | **false**    |
 
@@ -39,7 +39,7 @@ To use this GitHub Action, add the following step to your GitHub workflow YAML f
 Simple example:
 
 ```yaml
-uses: fmaule/generate-build-manifest@v2
+uses: fmaule/generate-build-manifest@v3
 with:
   action-info: false # disable writing action information to manifest (just an example)
 ```
@@ -47,7 +47,7 @@ with:
 Provide custom Dockerfile and package.json:
 
 ```yaml
-uses: fmaule/generate-build-manifest@v2
+uses: fmaule/generate-build-manifest@v3
 with:
   # assuming you have a 'libs' folder that includes the service
   dockerfile: './libs/service1/my-dockerfile'
@@ -64,7 +64,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Generate manifest
-        uses: fmaule/generate-build-manifest@v2
+        uses: fmaule/generate-build-manifest@v3
         with:
           action-info: false # disable writing action information to manifest
 
