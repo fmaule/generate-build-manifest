@@ -29989,6 +29989,8 @@ const getScm = () => {
     const { repository } = github.context.payload;
     const { sha, ref } = context;
     const { ssh_url, clone_url } = repository;
+    // "sha-1234567" is what you get by default by the official docker/metadata-action
+    const short_sha = `sha-${sha.slice(0, 7)}`;
     const branch = process.env.GITHUB_REF_NAME;
     const scm = {
         eventName: context.eventName,
@@ -29996,6 +29998,7 @@ const getScm = () => {
         clone_url,
         branch,
         sha,
+        short_sha,
         ref,
     };
     return { scm };
