@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.tag_name }}
-      - uses: teunmooij/github-versioned-release@v1.2.0
+      - uses: teunmooij/github-versioned-release@v1.2.1
         with:
           template: 'javascript-action'
         env:
