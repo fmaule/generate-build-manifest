@@ -1,13 +1,13 @@
 {
   "name": "generate-build-manifest",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "GitHub Action to generate manifest files for NodeJS projects",
   "main": "dist/index.js",
   "scripts": {
     "biome": "biome check .",
-    "biome:fix": "biome check . --apply",
-    "biome:fix-unsafe": "biome check . --apply-unsafe",
-    "prepare": "husky install",
+    "biome:fix": "biome check . --write",
+    "biome:fix-unsafe": "biome check . --write --unsafe",
+    "prepare": "husky",
     "ghadocs": "github-action-readme-generator --readme README.md && git add README.md",
     "pack": "ncc build src/index.ts -o dist",
     "pack:sourcemap": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
@@ -15,16 +15,16 @@
   "author": "Fernando A. Maule <fer@maule.pro>",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0"
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.2.2",
+    "@biomejs/biome": "2.4.15",
     "@octokit/webhooks-definitions": "^3.68.1",
-    "@types/node": "^20.17.1",
-    "@vercel/ncc": "^0.38.2",
-    "github-action-readme-generator": "^1.8.0",
-    "husky": "^8.0.3",
-    "typescript": "^5.6.3"
+    "@types/node": "^22.0.0",
+    "@vercel/ncc": "^0.38.4",
+    "github-action-readme-generator": "^1.10.7",
+    "husky": "^9.1.7",
+    "typescript": "^5.9.3"
   }
 }
