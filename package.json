@@ -9,8 +9,8 @@
     "biome:fix-unsafe": "biome check . --write --unsafe",
     "prepare": "husky",
     "ghadocs": "github-action-readme-generator --readme README.md && git add README.md",
-    "pack": "ncc build src/index.ts -o dist",
-    "pack:sourcemap": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
+    "pack": "tsdown src/index.ts --format cjs --out-dir dist --no-splitting --minify",
+    "pack:sourcemap": "tsdown src/index.ts --format cjs --out-dir dist --no-splitting --sourcemap"
   },
   "author": "Fernando A. Maule <fer@maule.pro>",
   "license": "ISC",
@@ -22,9 +22,9 @@
     "@biomejs/biome": "2.4.15",
     "@octokit/webhooks-definitions": "^3.68.1",
     "@types/node": "^22.0.0",
-    "@vercel/ncc": "^0.38.4",
     "github-action-readme-generator": "^1.10.7",
     "husky": "^9.1.7",
+    "tsdown": "^0.12.9",
     "typescript": "^5.9.3"
   }
 }
