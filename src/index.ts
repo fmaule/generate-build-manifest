@@ -1,13 +1,12 @@
-import { ActionInfo, Manifest, Package, SCM } from "./types";
-
-import fs from "fs";
+import fs from "node:fs";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import {
+import type {
   PullRequestEvent,
   PushEvent,
   WorkflowDispatchEvent,
 } from "@octokit/webhooks-definitions/schema";
+import type { ActionInfo, Manifest, Package, SCM } from "./types";
 
 // first we attempt to read the file from the path provided, if not found, we try to search in the GITHUB_WORKSPACE
 const getFilePath = (filePath: string) => {
